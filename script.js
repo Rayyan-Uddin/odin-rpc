@@ -1,10 +1,16 @@
-console.log('Rock Paper Scissor \n Rules:\n Rock beats Scissor \n Scissor beats Paper \n Paper beats Rock');
-
+//GLOBAL VARIABLES
+let rounds = 0;
 let humanScore = 0;
 let computerScore = 0;
-// let humanSelection;
-// let computerSelection;
-let scoreBoard = () => console.log(`Score: \nYou: ${humanScore} \nComputer: ${computerScore}`);
+let roundsDiv = document.querySelector('#rounds');
+let choiceDiv = document.querySelector('#computerChoice');
+let humanPointsDiv = document.querySelector('#humanScore');
+let computerPointsDiv = document.querySelector('#computerScore');
+let announcmentDiv = document.querySelector('#roundAnnouncement');
+let headForRules = document.querySelector('#head');
+const BTN_ROCK = document.querySelector('#rock');
+const BTN_PAPER = document.querySelector('#paper');
+const BTN_SCISSOR = document.querySelector('#scissor');
 
 // GET COMPUTER CHOICE
 function getComputerChoice() {
@@ -53,44 +59,86 @@ function getHumanChoice() {
 function playRound(human, computer) {
 
     if (human == computer) {
-        console.log("Draw!");
-    } else if (human == 'rock' && computer == 'scissor') {
-        console.log("You Win! Rock beats Scissor");
+        return "Round Draw!";
+    } else if (
+        (human == 'rock' && computer == 'scissor') ||
+        (human == 'paper' && computer == 'rock') ||
+        (human == 'scissor' && computer == 'paper')
+    ) {
         humanScore++;
-    } else if (human == 'paper' && computer == 'rock') {
-        console.log("You Win! Paper beats Rock");
-        humanScore++;
-    } else if (human == 'scissor' && computer == 'paper') {
-        console.log("You Win! Scissor beats Paper");
-        humanScore++;
+        return "You Win!";
     } else {
-        console.log("You Loose!");
         computerScore++;
+        return "Computer Wins!";
     }
 }
 
 //ENTIRE GAME
-function playGame() {
+function playGame(humanSelection) {
 
-    for (let i = 0; i < 5; i++) {
-        console.log("Round:", i + 1)
-        humanSelection = getHumanChoice();
-        computerSelection = getComputerChoice()
-        playRound(humanSelection, computerSelection)
+    let computerSelection = getComputerChoice();
+    let gameWinner = playRound(humanSelection, computerSelection);
+    rounds++;
+    roundsDiv.textContent = `Round : ${rounds}`;
+    choiceDiv.textContent = 'Computer Choose : ' + computerSelection;;
+    humanPointsDiv.textContent = `Your Score :  ${humanScore}`;
+    computerPointsDiv.textContent = `Computer Score :  ${computerScore}`;
+    announcmentDiv.textContent = gameWinner;
+
+    if (humanScore == 5) {
+        reset("Won");
+    } else if (computerScore == 5) {
+        reset("Lost");
     }
-    if (humanScore > computerScore) {
-        scoreBoard();
-        console.log("You Won The Game! \nReload to play again.")
-    } else if (humanScore == computerScore) {
-        scoreBoard();
-        console.log("This Game is Draw! \nReload to play again")
-    } else {
-        scoreBoard();
-        console.log("You Loose The Game! \nReload to play again.")
-    }
+}
+
+function reset(a) {
+    alert(`You ${a} the Game!`);
+    humanScore = 0;
+    computerScore = 0;
+    rounds = 0;
+    roundsDiv.textContent = `Round :`;
+    choiceDiv.textContent = `Computer Choose :`;
+    humanPointsDiv.textContent = `Your Score :`;
+    computerPointsDiv.textContent = `Computer Score :`;
+}
+
+// EVENTS
+BTN_ROCK.onclick = () => {
+    playGame('rock');
 
 }
-playGame();
+BTN_PAPER.onclick = () => {
+    playGame('paper');
+
+}
+BTN_SCISSOR.onclick = () => {
+    playGame('scissor');
+}
+
+headForRules.onclick = () => {
+    alert('Rock Paper Scissor \n Rules:\n Rock beats Scissor \n Scissor beats Paper \n Paper beats Rock');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
